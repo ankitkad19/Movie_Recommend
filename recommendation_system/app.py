@@ -15,6 +15,12 @@ def download_file_gdrive(url, filename):
         st.stop()
 
 
+def show_file_head(filename):
+    with open(filename, "rb") as f:
+        head = f.read(200)
+    st.warning(f"First 200 bytes of {filename}: {head}")
+
+
 def is_valid_pickle(filename):
     with open(filename, "rb") as f:
         start = f.read(1)
@@ -54,6 +60,7 @@ if not is_valid_pickle(MOVIE_LIST_PATH):
     st.error(
         "Downloaded movie_list.pkl is not a valid pickle file. Check your link and sharing settings."
     )
+    show_file_head(MOVIE_LIST_PATH)
     st.stop()
 
 if not is_valid_pickle(SIMILARITY_PATH):
@@ -62,6 +69,7 @@ if not is_valid_pickle(SIMILARITY_PATH):
         "Please check your Google Drive link and ensure the file is shared with 'Anyone with the link'. "
         "Try opening the link in an incognito window to verify direct download access."
     )
+    show_file_head(SIMILARITY_PATH)
     st.stop()
 
 movies_dict = pickle.load(open(MOVIE_LIST_PATH, "rb"))
