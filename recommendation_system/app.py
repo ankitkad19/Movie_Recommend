@@ -2,21 +2,17 @@ import streamlit as st
 import pickle
 import pandas as pd
 import os
-import requests
+import gdown
 
 
-def download_file(url, filename):
-    st.info(f"Downloading {filename} from {url} ...")
-    response = requests.get(url)
-    # Check if the response is HTML (likely an error page)
-    if response.headers.get("Content-Type", "").startswith("text/html"):
-        st.error(
-            f"Failed to download {filename}. The link may be invalid or access is restricted."
-        )
+def download_file_gdrive(url, filename):
+    st.info(f"Downloading {filename} from Google Drive ...")
+    try:
+        gdown.download(url, filename, quiet=False)
+        st.success(f"{filename} downloaded.")
+    except Exception as e:
+        st.error(f"Failed to download {filename}: {e}")
         st.stop()
-    with open(filename, "wb") as f:
-        f.write(response.content)
-    st.success(f"{filename} downloaded.")
 
 
 def is_valid_pickle(filename):
@@ -49,10 +45,10 @@ SIMILARITY_URL = (
 )
 
 if not os.path.exists(MOVIE_LIST_PATH):
-    download_file(MOVIE_LIST_URL, MOVIE_LIST_PATH)
+    download_file_gdrive(MOVIE_LIST_URL, MOVIE_LIST_PATH)
 
 if not os.path.exists(SIMILARITY_PATH):
-    download_file(SIMILARITY_URL, SIMILARITY_PATH)
+    download_file_gdrive(SIMILARITY_URL, SIMILARITY_PATH)
 
 if not is_valid_pickle(MOVIE_LIST_PATH):
     st.error(
@@ -78,6 +74,10 @@ st.title("Movie Recommendation System")
 selected_movie_name = st.selectbox("Enter the movie you like:", movies["title"].values)
 
 if st.button("Recommend"):
+    recommendations = recommend(selected_movie_name)
+    st.write("Recommendations for:", selected_movie_name)
+    for movie in recommendations:
+        st.write(movie)
     recommendations = recommend(selected_movie_name)
     st.write("Recommendations for:", selected_movie_name)
     for movie in recommendations:
