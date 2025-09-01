@@ -10,8 +10,10 @@ def download_file(url, filename):
     response = requests.get(url)
     # Check if the response is HTML (likely an error page)
     if response.headers.get("Content-Type", "").startswith("text/html"):
-        st.error(f"Failed to download {filename}. Check the link or permissions.")
-        raise RuntimeError(f"Failed to download {filename} from {url}")
+        st.error(
+            f"Failed to download {filename}. The link may be invalid or access is restricted."
+        )
+        st.stop()
     with open(filename, "wb") as f:
         f.write(response.content)
     st.success(f"{filename} downloaded.")
