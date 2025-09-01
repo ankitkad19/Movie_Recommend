@@ -62,7 +62,9 @@ if not is_valid_pickle(MOVIE_LIST_PATH):
 
 if not is_valid_pickle(SIMILARITY_PATH):
     st.error(
-        "Downloaded similarity.pkl is not a valid pickle file. Check your link and sharing settings."
+        "Downloaded similarity.pkl is not a valid pickle file. "
+        "Please check your Google Drive link and ensure the file is shared with 'Anyone with the link'. "
+        "Try opening the link in an incognito window to verify direct download access."
     )
     st.stop()
 
