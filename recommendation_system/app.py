@@ -26,7 +26,9 @@ def recommend(movie):
 
 
 MOVIE_LIST_PATH = "movie_list.pkl"
-MOVIE_LIST_URL = "YOUR_MOVIE_LIST_DIRECT_LINK"  # <-- Replace with your actual direct download link
+MOVIE_LIST_URL = (
+    "https://drive.google.com/uc?export=download&id=16443lzrLofq2PowRbBWEahIEJCCoOpmZ"
+)
 
 if not os.path.exists(MOVIE_LIST_PATH):
     download_file(MOVIE_LIST_URL, MOVIE_LIST_PATH)
