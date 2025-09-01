@@ -8,6 +8,10 @@ import requests
 def download_file(url, filename):
     st.info(f"Downloading {filename} from {url} ...")
     response = requests.get(url)
+    # Check if the response is HTML (likely an error page)
+    if response.headers.get("Content-Type", "").startswith("text/html"):
+        st.error(f"Failed to download {filename}. Check the link or permissions.")
+        raise RuntimeError(f"Failed to download {filename} from {url}")
     with open(filename, "wb") as f:
         f.write(response.content)
     st.success(f"{filename} downloaded.")
