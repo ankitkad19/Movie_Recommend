@@ -5,7 +5,7 @@ import os
 import requests
 
 
-def download_similarity(url, filename):
+def download_file(url, filename):
     st.info(f"Downloading {filename} from {url} ...")
     response = requests.get(url)
     with open(filename, "wb") as f:
@@ -25,15 +25,21 @@ def recommend(movie):
     return recommended_movies
 
 
+MOVIE_LIST_PATH = "movie_list.pkl"
+MOVIE_LIST_URL = "YOUR_MOVIE_LIST_DIRECT_LINK"  # <-- Replace with your actual direct download link
+
+if not os.path.exists(MOVIE_LIST_PATH):
+    download_file(MOVIE_LIST_URL, MOVIE_LIST_PATH)
+
 SIMILARITY_PATH = "similarity.pkl"
 SIMILARITY_URL = (
     "https://drive.google.com/uc?export=download&id=1ehXOlYlvz-_gUEmNzfT3Mf2zcv4mQ6Sy"
 )
 
 if not os.path.exists(SIMILARITY_PATH):
-    download_similarity(SIMILARITY_URL, SIMILARITY_PATH)
+    download_file(SIMILARITY_URL, SIMILARITY_PATH)
 
-movies_dict = pickle.load(open("movie_list.pkl", "rb"))
+movies_dict = pickle.load(open(MOVIE_LIST_PATH, "rb"))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open(SIMILARITY_PATH, "rb"))
 
